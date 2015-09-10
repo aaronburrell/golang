@@ -5,7 +5,8 @@
 module:testrunner
 
 GET     /                                       App.Index
-GET     /groups                                 App.Group
+GET     /index                                  App.Index
+GET     /groups                                 Group.Group
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
