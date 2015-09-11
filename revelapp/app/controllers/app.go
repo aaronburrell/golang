@@ -45,8 +45,6 @@ func (c App) Index() revel.Result {
 }
 
 func (c App) Auth(code string) revel.Result {
-	//t := &oauth2.Transport{Config: GITHUB}
-	//tok, err := t.Exchange(code)
 	tok, err := GITHUB.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		revel.ERROR.Println(err)
