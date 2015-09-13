@@ -16,17 +16,23 @@ type App struct {
 	*revel.Controller
 }
 
-var GITHUB = &oauth2.Config{
-	//ClientID:     "316920733717ec5b4771",
-	//ClientSecret: "c4c9d450d1dceba04632aea69bd7c4c839d917f1",
+var GOOGLE = &oauth2.Config{
 	ClientID:     "966343595637-da2m2ti69g48f0ct7jtml5vtto7ub7un.apps.googleusercontent.com",
 	ClientSecret: "2JrU5VRNSrTVexzq7_6A5DSD",
 	Scopes:       []string{"openid"},
 	Endpoint: oauth2.Endpoint{
-        //AuthURL:  "https://github.com/login/oauth/authorize",
-        //TokenURL: "https://github.com/login/oauth/access_token",
 				AuthURL:  "https://accounts.google.com/o/oauth2/auth",
 				TokenURL: "https://www.googleapis.com/oauth2/v3/token",
+    },
+	RedirectURL:  "http://localhost:9000/App/Auth",
+}
+
+var GITHUB = &oauth2.Config{
+	ClientID:     "316920733717ec5b4771",
+	ClientSecret: "c4c9d450d1dceba04632aea69bd7c4c839d917f1",
+	Endpoint: oauth2.Endpoint{
+        AuthURL:  "https://github.com/login/oauth/authorize",
+        TokenURL: "https://github.com/login/oauth/access_token",
     },
 	RedirectURL:  "http://localhost:9000/App/Auth",
 }
@@ -50,17 +56,17 @@ func (c App) Index() revel.Result {
 		revel.INFO.Println(me)
 	}
 
-	authUrl := GITHUB.AuthCodeURL("foo")
+	authUrl := GOOGLE.AuthCodeURL("foo")
 	return c.Render(me, authUrl)
 }
 
+
 func (c App) Auth(code string) revel.Result {
-	tok, err := GITHUB.Exchange(oauth2.NoContext, code)
+	tok, err := GOOGLE.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		revel.ERROR.Println(err)
 		return c.Redirect(App.Index)
 	}
-
 	user := c.connected()
 	user.AccessToken = tok.AccessToken
 	return c.Redirect(App.Index)
