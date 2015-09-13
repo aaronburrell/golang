@@ -17,11 +17,16 @@ type App struct {
 }
 
 var GITHUB = &oauth2.Config{
-	ClientID:     "316920733717ec5b4771",
-	ClientSecret: "c4c9d450d1dceba04632aea69bd7c4c839d917f1",
+	//ClientID:     "316920733717ec5b4771",
+	//ClientSecret: "c4c9d450d1dceba04632aea69bd7c4c839d917f1",
+	ClientID:     "966343595637-da2m2ti69g48f0ct7jtml5vtto7ub7un.apps.googleusercontent.com",
+	ClientSecret: "2JrU5VRNSrTVexzq7_6A5DSD",
+	Scopes:       []string{"openid"},
 	Endpoint: oauth2.Endpoint{
-        AuthURL:  "https://github.com/login/oauth/authorize",
-        TokenURL: "https://github.com/login/oauth/access_token",
+        //AuthURL:  "https://github.com/login/oauth/authorize",
+        //TokenURL: "https://github.com/login/oauth/access_token",
+				AuthURL:  "https://accounts.google.com/o/oauth2/auth",
+				TokenURL: "https://www.googleapis.com/oauth2/v3/token",
     },
 	RedirectURL:  "http://localhost:9000/App/Auth",
 }
@@ -31,8 +36,13 @@ func (c App) Index() revel.Result {
 	me := map[string]interface{}{}
 	if u != nil && u.AccessToken != "" {
 		log.Println("This is the user: " + u.AccessToken)
-		resp, _ := http.Get("https://api.github.com/user?access_token=" +
-			url.QueryEscape(u.AccessToken))
+		//resp, _ := http.Get("https://api.github.com/user?access_token=" +
+		//	url.QueryEscape(u.AccessToken))
+		client := &http.Client{}
+		req, _ := http.NewRequest("GET", "https://www.googleapis.com/plus/v1/people/me/openIdConnect", nil)
+		req.Header.Add("Authorization", "Bearer " + url.QueryEscape(u.AccessToken))
+		resp, _ := client.Do(req)
+
 		defer resp.Body.Close()
 		if err := json.NewDecoder(resp.Body).Decode(&me); err != nil {
 			revel.ERROR.Println(err)
