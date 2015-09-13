@@ -7,8 +7,8 @@
 
 {{if .me}}
 <h3>You're {{.me.name}} on Google</h3>
-<img src="" />
-
+<img src="{{.me.picture}}" /><br></br>
+<a href="{{.me.profile}}">Access Google Profile</a>
 {{else}}
 <a href="{{.authUrl}}">login</a>
 {{end}}
