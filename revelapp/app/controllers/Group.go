@@ -8,8 +8,10 @@ type Group struct {
 }
 
 func (c Group) Group() revel.Result {
+
 	if c.validateUser("/groups") {
 	return c.Render()
 	}
 	return c.Redirect(App.Index)
+	
 }
