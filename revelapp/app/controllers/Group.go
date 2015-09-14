@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/revel/revel"
 	"gitprojects/golang/revelapp/app/models"
+	"log"
 )
 type Group struct {
 	*revel.Controller
@@ -10,9 +11,11 @@ type Group struct {
 
 func (c Group) Group() revel.Result {
 	u := c.connected()
+	log.Println("HERE")
 	if u != nil && u.AccessToken != "" {
 	return c.Render()
 	}
+	c.Session["redirect"] = "/groups"
 	return c.Redirect(App.Index)
 }
 
