@@ -16,6 +16,17 @@
   <div class="row">
     <div class="span6">
       {{template "flash.html" .}}
+      {{if not .users}}
+      <p>
+        No Users Found
+      </p>
+      {{else}}
+        <ul>
+        {{range .users}}
+        <li>{{.Uid}} - {{.AccessToken}}</li>
+        {{end}}
+        </ul>
+        {{end}}
     </div>
   </div>
 </div>

@@ -69,6 +69,11 @@ func (c App) Auth(code string) revel.Result {
 	user := c.connected()
 	user.AccessToken = tok.AccessToken
 
+	err = c.Txn.Insert(&user)
+	if err != nil {
+		panic(err)
+	}
+
 	if _, ok := c.Session["redirect"]; ok {
 		if c.Session["redirect"] != "" {
 			redirectURL := c.Session["redirect"]
