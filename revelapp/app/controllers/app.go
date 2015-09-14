@@ -1,19 +1,19 @@
 package controllers
 
 import (
-	"golang.org/x/oauth2"
 	"encoding/json"
 	"fmt"
-	"github.com/revel/revel"
 	"github.com/aaronburrell/golang/revelapp/app/models"
+	"github.com/revel/revel"
+	"golang.org/x/oauth2"
+	"log"
 	"net/http"
 	"net/url"
 	"strconv"
-	"log"
 )
 
 type App struct {
-	*revel.Controller
+	GorpController
 }
 
 var GOOGLE = &oauth2.Config{
@@ -21,20 +21,20 @@ var GOOGLE = &oauth2.Config{
 	ClientSecret: "2JrU5VRNSrTVexzq7_6A5DSD",
 	Scopes:       []string{"openid"},
 	Endpoint: oauth2.Endpoint{
-				AuthURL:  "https://accounts.google.com/o/oauth2/auth",
-				TokenURL: "https://www.googleapis.com/oauth2/v3/token",
-    },
-	RedirectURL:  "http://localhost:9000/App/Auth",
+		AuthURL:  "https://accounts.google.com/o/oauth2/auth",
+		TokenURL: "https://www.googleapis.com/oauth2/v3/token",
+	},
+	RedirectURL: "http://localhost:9000/App/Auth",
 }
 
 var GITHUB = &oauth2.Config{
 	ClientID:     "316920733717ec5b4771",
 	ClientSecret: "c4c9d450d1dceba04632aea69bd7c4c839d917f1",
 	Endpoint: oauth2.Endpoint{
-        AuthURL:  "https://github.com/login/oauth/authorize",
-        TokenURL: "https://github.com/login/oauth/access_token",
-    },
-	RedirectURL:  "http://localhost:9000/App/Auth",
+		AuthURL:  "https://github.com/login/oauth/authorize",
+		TokenURL: "https://github.com/login/oauth/access_token",
+	},
+	RedirectURL: "http://localhost:9000/App/Auth",
 }
 
 func (c App) Index() revel.Result {
@@ -46,7 +46,7 @@ func (c App) Index() revel.Result {
 		//	url.QueryEscape(u.AccessToken))
 		client := &http.Client{}
 		req, _ := http.NewRequest("GET", "https://www.googleapis.com/plus/v1/people/me/openIdConnect", nil)
-		req.Header.Add("Authorization", "Bearer " + url.QueryEscape(u.AccessToken))
+		req.Header.Add("Authorization", "Bearer "+url.QueryEscape(u.AccessToken))
 		resp, _ := client.Do(req)
 
 		defer resp.Body.Close()
@@ -60,7 +60,6 @@ func (c App) Index() revel.Result {
 	return c.Render(me, authUrl)
 }
 
-
 func (c App) Auth(code string) revel.Result {
 	tok, err := GOOGLE.Exchange(oauth2.NoContext, code)
 	if err != nil {
@@ -72,10 +71,10 @@ func (c App) Auth(code string) revel.Result {
 
 	if _, ok := c.Session["redirect"]; ok {
 		if c.Session["redirect"] != "" {
-		redirectURL := c.Session["redirect"]
-		c.Session["redirect"] = ""
-		return c.Redirect(redirectURL)
-	}
+			redirectURL := c.Session["redirect"]
+			c.Session["redirect"] = ""
+			return c.Redirect(redirectURL)
+		}
 	}
 
 	return c.Redirect(App.Index)
@@ -104,10 +103,10 @@ func (c App) connected() *models.User {
 }
 
 func (c App) validateUser(redirectUrl string) bool {
-		u := c.connected()
-		if u != nil && u.AccessToken != "" {
-			c.Session["redirect"] = redirectUrl
-			return true
-		}
-		return false
+	u := c.connected()
+	if u != nil && u.AccessToken != "" {
+		c.Session["redirect"] = redirectUrl
+		return true
+	}
+	return false
 }
