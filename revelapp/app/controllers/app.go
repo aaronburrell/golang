@@ -66,10 +66,11 @@ func (c App) Auth(code string) revel.Result {
 		revel.ERROR.Println(err)
 		return c.Redirect(App.Index)
 	}
+
 	user := c.connected()
 	user.AccessToken = tok.AccessToken
 
-	err = c.Txn.Insert(&user)
+	err = c.Txn.Insert(user)
 	if err != nil {
 		panic(err)
 	}
