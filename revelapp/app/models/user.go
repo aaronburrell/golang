@@ -5,6 +5,13 @@ import "math/rand"
 type User struct {
 	Uid         int
 	AccessToken string
+	Sub					string
+	Name				string
+	Given_Name		string
+	Family_Name	string
+	Profile			string
+	Picture			string
+	Gender			string
 }
 
 var db = make(map[int]*User)

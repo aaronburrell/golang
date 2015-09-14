@@ -69,6 +69,21 @@ func (c App) Auth(code string) revel.Result {
 
 	user := c.connected()
 	user.AccessToken = tok.AccessToken
+	if user != nil && user.AccessToken != "" {
+		//resp, _ := http.Get("https://api.github.com/user?access_token=" +
+		//	url.QueryEscape(u.AccessToken))
+		client := &http.Client{}
+		req, _ := http.NewRequest("GET", "https://www.googleapis.com/plus/v1/people/me/openIdConnect", nil)
+		req.Header.Add("Authorization", "Bearer "+url.QueryEscape(user.AccessToken))
+		resp, _ := client.Do(req)
+
+		defer resp.Body.Close()
+		if err := json.NewDecoder(resp.Body).Decode(user); err != nil {
+			revel.ERROR.Println(err)
+		}
+
+	}
+
 
 	err = c.Txn.Insert(user)
 	if err != nil {
