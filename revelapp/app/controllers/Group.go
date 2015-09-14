@@ -2,10 +2,9 @@ package controllers
 
 import (
 	"github.com/revel/revel"
-	"gitprojects/golang/revelapp/app/models"
 )
 type Group struct {
-	*revel.Controller
+	App
 }
 
 func (c Group) Group() revel.Result {
@@ -15,12 +14,4 @@ func (c Group) Group() revel.Result {
 	}
 	c.Session["redirect"] = "/groups"
 	return c.Redirect(App.Index)
-}
-
-func init() {
-	revel.InterceptFunc(setuser, revel.BEFORE, &Group{})
-}
-
-func (c Group) connected() *models.User {
-	return c.RenderArgs["user"].(*models.User)
 }
