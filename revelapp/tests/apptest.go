@@ -16,6 +16,12 @@ func (t *AppTest) TestThatIndexPageWorks() {
 	t.AssertContentType("text/html; charset=utf-8")
 }
 
+func (t *AppTest) TestThatNewIndexPageWorks() {
+	t.Get("/index")
+	t.AssertOk()
+	t.AssertContentType("text/html; charset=utf-8")
+}
+
 func (t *AppTest) After() {
 	println("Tear down")
 }
