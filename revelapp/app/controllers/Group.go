@@ -8,10 +8,8 @@ type Group struct {
 }
 
 func (c Group) Group() revel.Result {
-	u := c.connected()
-	if u != nil && u.AccessToken != "" {
+	if c.validateUser("/groups") {
 	return c.Render()
 	}
-	c.Session["redirect"] = "/groups"
 	return c.Redirect(App.Index)
 }

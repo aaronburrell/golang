@@ -102,3 +102,12 @@ func init() {
 func (c App) connected() *models.User {
 	return c.RenderArgs["user"].(*models.User)
 }
+
+func (c App) validateUser(redirectUrl string) bool {
+		u := c.connected()
+		if u != nil && u.AccessToken != "" {
+			c.Session["redirect"] = redirectUrl
+			return true
+		}
+		return false
+}
