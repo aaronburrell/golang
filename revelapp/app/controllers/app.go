@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/revel/revel"
-	"gitprojects/golang/revelapp/app/models"
+	"github.com/aaronburrell/golang/revelapp/app/models"
 	"net/http"
 	"net/url"
 	"strconv"
