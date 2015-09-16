@@ -133,5 +133,6 @@ func (c App) validateUser(redirectUrl string) bool {
 
 func (c App) Logout() revel.Result{
 	c.Session["uid"] = ""
+	c.Session["redirect"] = ""
 	return c.Redirect(App.Index)
 }
