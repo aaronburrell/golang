@@ -9,8 +9,11 @@
 <h3>You're {{.me.name}} on Google</h3>
 <img src="{{.me.picture}}" /><br></br>
 <a href="{{.me.profile}}">Access Google Profile</a>
+<br></br>
+<a href="/logout">logout</a>
 {{else}}
 <a href="{{.authUrl}}">login</a>
+
 {{end}}
 
 {{template "footer.html" .}}

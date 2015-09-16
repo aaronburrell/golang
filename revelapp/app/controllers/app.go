@@ -89,7 +89,6 @@ func (c App) Auth(code string) revel.Result {
 	if err != nil {
 		panic(err)
 	}
-
 	if _, ok := c.Session["redirect"]; ok {
 		if c.Session["redirect"] != "" {
 			redirectURL := c.Session["redirect"]
@@ -130,4 +129,9 @@ func (c App) validateUser(redirectUrl string) bool {
 		return true
 	}
 	return false
+}
+
+func (c App) Logout() revel.Result{
+	c.Session["uid"] = ""
+	return c.Redirect(App.Index)
 }

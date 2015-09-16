@@ -6,6 +6,7 @@ module:testrunner
 
 GET     /                                       App.Index
 GET     /index                                  App.Index
+GET     /logout                                 App.Logout
 GET     /groups                                 Group.Group
 
 # Ignore favicon requests
