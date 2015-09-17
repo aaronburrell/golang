@@ -89,11 +89,13 @@ func (c App) Auth(code string) revel.Result {
 	if err != nil {
 		panic(err)
 	}
-	if _, ok := c.Session["redirect"]; ok {
-		if c.Session["redirect"] != "" {
-			redirectURL := c.Session["redirect"]
-			c.Session["redirect"] = ""
-			return c.Redirect(redirectURL)
+	if user != nil && user.AccessToken != "" {
+		if _, ok := c.Session["redirect"]; ok {
+			if c.Session["redirect"] != "" {
+				redirectURL := c.Session["redirect"]
+				c.Session["redirect"] = ""
+				return c.Redirect(redirectURL)
+			}
 		}
 	}
 
@@ -125,9 +127,9 @@ func (c App) connected() *models.User {
 func (c App) validateUser(redirectUrl string) bool {
 	u := c.connected()
 	if u != nil && u.AccessToken != "" {
-		c.Session["redirect"] = redirectUrl
 		return true
 	}
+	c.Session["redirect"] = redirectUrl
 	return false
 }
 
